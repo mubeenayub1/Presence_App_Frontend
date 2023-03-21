@@ -8,15 +8,16 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import color from '../../components/assets/color';
-import {Neomorph} from 'react-native-neomorph-shadows';
+import ImagePicker from 'react-native-image-crop-picker';
+import { Neomorph } from 'react-native-neomorph-shadows';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const OTP = () => {
   const navigation = useNavigation();
@@ -89,11 +90,12 @@ const OTP = () => {
   const handleBtn = () => {
     console.log('hey');
   };
+  
 
   return (
     <LinearGradient
       colors={['#34393F', '#34393F', '#1E1F24']}
-      style={{flex: 1}}>
+      style={{ flex: 1, }}>
       <StatusBar backgroundColor="#34393F" barStyle="light-content" />
 
       <Text
@@ -137,7 +139,7 @@ const OTP = () => {
             }}>
             <LinearGradient
               colors={['#26272B', '#26272B', '#33383E']}
-              style={{width: '100%', height: '100%', borderRadius: 5}}>
+              style={{ width: '100%', height: '100%', borderRadius: 5 }}>
               <TextInput
                 ref={inputRef1}
                 style={styles.input}
@@ -160,7 +162,7 @@ const OTP = () => {
             }}>
             <LinearGradient
               colors={['#26272B', '#26272B', '#33383E']}
-              style={{width: '100%', height: '100%', borderRadius: 5}}>
+              style={{ width: '100%', height: '100%', borderRadius: 5 }}>
               <TextInput
                 ref={inputRef2}
                 style={styles.input}
@@ -184,7 +186,7 @@ const OTP = () => {
             }}>
             <LinearGradient
               colors={['#26272B', '#26272B', '#33383E']}
-              style={{width: '100%', height: '100%', borderRadius: 5}}>
+              style={{ width: '100%', height: '100%', borderRadius: 5 }}>
               <TextInput
                 ref={inputRef3}
                 style={styles.input}
@@ -207,7 +209,7 @@ const OTP = () => {
             }}>
             <LinearGradient
               colors={['#26272B', '#26272B', '#33383E']}
-              style={{width: '100%', height: '100%', borderRadius: 5}}>
+              style={{ width: '100%', height: '100%', borderRadius: 5 }}>
               <TextInput
                 ref={inputRef4}
                 style={styles.input}
@@ -230,7 +232,7 @@ const OTP = () => {
             }}>
             <LinearGradient
               colors={['#26272B', '#26272B', '#33383E']}
-              style={{width: '100%', height: '100%', borderRadius: 5}}>
+              style={{ width: '100%', height: '100%', borderRadius: 5 }}>
               <TextInput
                 ref={inputRef5}
                 style={styles.input}
@@ -262,8 +264,8 @@ const OTP = () => {
             justifyContent: 'center',
           }}>
           <LinearGradient
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
             locations={[0, 0.5, 0.6]}
             colors={['#565962', '#9F9F9F', '#9F9F9F']}
             style={{
@@ -273,9 +275,10 @@ const OTP = () => {
               alignItems: 'center',
               justifyContent: 'center',
               bottom: heightPercentageToDP(0.1),
+              alignSelf: 'center'
             }}>
-            <Text style={{fontSize: 20, fontWeight: '400', color: color.white}}>
-              Sign In
+            <Text style={{ fontSize: 20, fontWeight: '400', color: color.white }}>
+              Verify
             </Text>
           </LinearGradient>
         </Neomorph>

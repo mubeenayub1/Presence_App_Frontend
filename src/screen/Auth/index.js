@@ -17,7 +17,7 @@ const Auth = () => {
       style={{ flex: 1, alignItems: 'center' }}>
       <StatusBar backgroundColor="#34393F" barStyle="light-content" />
 
-      <View style={{width:'95%', alignSelf:'center', alignItems:'center',justifyContent:'center', backgroundColor:'red', alignItems:'center', justifyContent:'center'}}>
+      <View style={{width:'95%', alignSelf:'center', alignItems:'center',justifyContent:'center', alignItems:'center', justifyContent:'center'}}>
       <Shadow
         inner={false} // <- enable inner shadow
         useArt // <- set this prop to use non-native shadow on ios
@@ -28,21 +28,21 @@ const Auth = () => {
           shadowRadius: 10,
           borderRadius: 0,
           backgroundColor: '#26272B',
-          width:300,
+          width:350,
           height: 45,
           marginVertical: 20,
           flexDirection: 'row',
           alignSelf:'center'
         }}
       >
-        <TouchableOpacity onPress={() => setComponentToShow(true)} style={{backgroundColor:'pink', width:'50%', height:45}}>
+        <TouchableOpacity onPress={() => setComponentToShow(true)} style={{ width:'50%', height:45}}>
 
           {/* <View style={{width:'100%', height:45, backgroundColor:'red'}}></View> */}
 
           {
 
             componentToShow === true ?
-              <ImageBackground style={{ width: wp(47.5), left:wp(0) ,height: 45,  alignItems: 'center', justifyContent: "center" }} source={require('../../components/Images/loginRec.png')}>
+              <ImageBackground style={{ width: wp(45), left:wp(0) ,height: 45,  alignItems: 'center', justifyContent: "center" }} source={require('../../components/Images/loginRec.png')}>
                 <Text style={{ fontSize: 16, fontWeight: '400', color: 'white' }}>Sign In</Text>
               </ImageBackground>
               :
@@ -54,17 +54,17 @@ const Auth = () => {
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => setComponentToShow(false)} style={{backgroundColor:'yellow', width:'50%', height:45}}>
+        <TouchableOpacity onPress={() => setComponentToShow(false)} style={{ width:'50%', height:45}}>
         {/* <View style={{width:'100%', height:45, backgroundColor:'pink'}}></View> */}
 
           {
             componentToShow === false ?
-            <ImageBackground style={{ width: wp(47.5), alignSelf:'flex-end'  ,height: 45,  alignItems: 'center', justifyContent: "center" }} source={require('../../components/Images/loginRec.png')}>
-            <Text style={{ fontSize: 16, fontWeight: '400', color: 'white'}}>Sign In</Text>
+            <ImageBackground style={{ width: wp(45), marginRight:'-5%' ,alignSelf:'flex-end'  ,height: 45,  alignItems: 'center', justifyContent: "center" }} source={require('../../components/Images/loginRec.png')}>
+            <Text style={{ fontSize: 16, fontWeight: '400', color: 'white'}}>Sign Up</Text>
           </ImageBackground>
           :
           <View style={{ alignItems: 'center', justifyContent: 'center', width: 182, height: 45 }}>
-            <Text style={{ fontSize: 16, fontWeight: '400', color: 'white' }}>Sign In</Text>
+            <Text style={{ fontSize: 16, fontWeight: '400', color: 'white' }}>Sign Up</Text>
           </View>
           }
         </TouchableOpacity>

@@ -11,7 +11,7 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 const Login = () => {
   const navigation = useNavigation()
   return (
-    <ScrollView style={{flex:1, }} showsVerticalScrollIndicator={false}>
+    <ScrollView style={{width:'100%'}} showsVerticalScrollIndicator={false}>
       <Image style={{width:widthPercentageToDP(40) , height:heightPercentageToDP(20), alignSelf:'center'}} source={require('../Images/logo.png')}/>
     
     {/* Input  */}
@@ -40,7 +40,7 @@ const Login = () => {
         <TextInput
         placeholder='Username'
         placeholderTextColor={'#3B3D41'}
-        style={{width:305, height:50, color:'white', fontSize:17, fontWeight:'400'}}
+        style={{width:'82%', height:50, color:'white', fontSize:17, fontWeight:'400'}}
         // onChangeText={onChangeText}
         // value={text}
       />
@@ -66,12 +66,12 @@ const Login = () => {
     <LinearGradient
       start={{x: 0, y: 0}} end={{x: 1, y: 0}}
       colors={['#1E1F24', '#34393F', '#34393F', ]}
-      style={{ flex: 1, alignItems: 'center' , flexDirection:'row'}}>
-        <Image style={{width:15 , height:19, marginHorizontal:20}} source={require('../Icon/lock.png')} />
+      style={{ width:'100%', alignItems: 'center' , flexDirection:'row'}}>
+        <Image style={{width:'5%' , height:19, marginHorizontal:20}} source={require('../Icon/lock.png')} />
         <TextInput
         placeholder='Password'
         placeholderTextColor={'#3B3D41'}
-        style={{width:305, height:50, color:'white', fontSize:17, fontWeight:'400'}}
+        style={{width:'82%' ,height:50, color:'white', fontSize:17, fontWeight:'400'}}
         // onChangeText={onChangeText}
         // value={text}
       />
@@ -82,7 +82,7 @@ const Login = () => {
 
 
 {/* Button Section */}
-<TouchableOpacity onPress={() => navigation.navigate('OTP')}>
+<TouchableOpacity onPress={() => navigation.navigate('OTP')} style={{alignSelf:'center'}}>
   <Neomorph
   darkShadowColor="black" // <- set this
   lightShadowColor="white" // <- this
@@ -94,7 +94,6 @@ const Login = () => {
     width: widthPercentageToDP(89),
     height: heightPercentageToDP(8),
     alignSelf:'center',
-    left:widthPercentageToDP(1),
     marginVertical:heightPercentageToDP(6),
     alignItems:'center',
     justifyContent:'center'
