@@ -8,12 +8,17 @@ import { useNavigation } from '@react-navigation/native';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 import { launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
+import { ALERT_TYPE,  Toast } from 'react-native-alert-notification';
+
 
 
 const SignUp = () => {
   const navigation = useNavigation();
   const [showModel, setShowModel] = useState(true)
   const [photo, setPhoto] = useState(null);
+  const [name , setName] = useState('')
+  const [phone , setPhone] = useState('')
+  const [password , setPassword] = useState('')
 
   const OpenCamera = () => {
       ImagePicker.openCamera({
@@ -22,21 +27,87 @@ const SignUp = () => {
           cropping: true,
           useFrontCamera: true,
       }).then(image => {
-          console.log(image);
+          console.log("--Image Through Camera---->",image);
+          setPhoto(image)
       });
   };
 
   const selectPhotoFromGallery = () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        setPhoto(response);
-      }
-    });
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      useFrontCamera: true,
+  }).then(image => {
+      // console.log("--Image Through Camera---->",image);
+      setPhoto(image)
+  });
+    // launchImageLibrary({ mediaType: 'photo' }, (response) => {
+    //   if (response.didCancel) {
+    //     console.log('User cancelled image picker');
+    //   } else if (response.error) {
+    //     console.log('ImagePicker Error: ', response.error);
+    //   } else {
+    //     setPhoto(response.assets[0].uri)
+    //     console.log("--Image Through Gallery---->",response.assets[0].uri);
+    //   }
+    // });
   };
+
+
+
+  const handleBtn = () =>{
+    var myHeaders = new Headers();
+myHeaders.append("Cookie", "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDFiODIxMWEwNjdjYWZjNDJjMWQyZjIiLCJpYXQiOjE2Nzk1MjQzNjksImV4cCI6MTY4MDgyMDM2OX0.TmJCQ4rQxCcivH7-LhpXVstHBK5CAmgALAWu6xiSYkA");
+const imgObj = {
+  name: photo.path.split('/')[
+    photo.path.split('/').length - 1
+  ],
+  type: photo.mime,
+  size: photo.size,
+  uri: photo.path,
+  lastModified: photo.modificationDate,
+  lastModifiedDate: new Date(),
+};
+// formata.append('image', imgObj);
+var formdata = new FormData();
+formdata.append("name", name);
+formdata.append("email", phone);
+formdata.append("password", password);
+formdata.append("image", imgObj);
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://16.170.213.237:4000/api/v1/register", requestOptions)
+  .then(response => response.text())
+  .then(result => {
+    let data = JSON.parse(result)
+    // console.log(data);
+    if(data.success === false){
+      return  Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Warning',
+        textBody: data.message,
+      })
+    }
+    if(data.sucess === true){
+      return navigation.replace('OTP',{profile:photo})
+    }
+  })
+  .catch(error => console.log('error', error));
+
+  }
+
+
+
+
+
+
 
   return (
     <ScrollView style={{ width: '100%' }} showsVerticalScrollIndicator={false}>
@@ -86,13 +157,45 @@ const SignUp = () => {
             start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             colors={['#1E1F24', '#34393F', '#34393F',]}
             style={{ flex: 1, alignItems: 'center', flexDirection: 'row' }}>
-            <Image style={{ width: 15, height: 19, marginHorizontal: 20 }} source={require('../Icon/lock.png')} />
+            <Image style={{ width: 15, height: 19, marginHorizontal: 20 }} source={require('../Icon/profile.png')} />
             <TextInput
-              placeholder='Password'
+              placeholder='Username'
               placeholderTextColor={'#3B3D41'}
-              style={{ width: 305, height: 50, color: 'white', fontSize: 17, fontWeight: '400' }}
-            // onChangeText={onChangeText}
-            // value={text}
+              style={{ width: '80%', height: 50, color: 'white', fontSize: 17, fontWeight: '400' }}
+            onChangeText={setName}
+            value={name}
+            />
+          </LinearGradient>
+        </Shadow>
+        {/* Input  */}
+        <Shadow
+          inner={false} // <- enable inner shadow
+          useArt // <- set this prop to use non-native shadow on ios
+          style={{
+            shadowOffset: { width: 5, height: 5 },
+            shadowOpacity: 0.3,
+            shadowColor: "black",
+            shadowRadius: 10,
+            borderRadius: 0,
+            backgroundColor: 'transparent',
+            width: widthPercentageToDP(90),
+            height: heightPercentageToDP(7.5),
+            marginVertical: 20,
+            flexDirection: 'row'
+          }}
+        >
+          <LinearGradient
+            start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+            colors={['#1E1F24', '#34393F', '#34393F',]}
+            style={{ flex: 1, alignItems: 'center', flexDirection: 'row' }}>
+            <Image style={{ width: 15, height: 19, marginHorizontal: 20 }} source={require('../Icon/phone.png')} />
+            <TextInput
+              placeholder='Phone Number'
+              // keyboardType = 'numeric'
+              placeholderTextColor={'#3B3D41'}
+              style={{ width: '80%', height: 50, color: 'white', fontSize: 17, fontWeight: '400' }}
+            onChangeText={setPhone}
+            value={phone}
             />
           </LinearGradient>
         </Shadow>
@@ -119,42 +222,12 @@ const SignUp = () => {
             style={{ flex: 1, alignItems: 'center', flexDirection: 'row' }}>
             <Image style={{ width: 15, height: 19, marginHorizontal: 20 }} source={require('../Icon/lock.png')} />
             <TextInput
+              secureTextEntry={true}
               placeholder='Password'
               placeholderTextColor={'#3B3D41'}
-              style={{ width: 305, height: 50, color: 'white', fontSize: 17, fontWeight: '400' }}
-            // onChangeText={onChangeText}
-            // value={text}
-            />
-          </LinearGradient>
-        </Shadow>
-        {/* Input  */}
-        <Shadow
-          inner={false} // <- enable inner shadow
-          useArt // <- set this prop to use non-native shadow on ios
-          style={{
-            shadowOffset: { width: 5, height: 5 },
-            shadowOpacity: 0.3,
-            shadowColor: "black",
-            shadowRadius: 10,
-            borderRadius: 0,
-            backgroundColor: 'transparent',
-            width: widthPercentageToDP(90),
-            height: heightPercentageToDP(7.5),
-            marginVertical: 20,
-            flexDirection: 'row'
-          }}
-        >
-          <LinearGradient
-            start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
-            colors={['#1E1F24', '#34393F', '#34393F',]}
-            style={{ flex: 1, alignItems: 'center', flexDirection: 'row' }}>
-            <Image style={{ width: 15, height: 19, marginHorizontal: 20 }} source={require('../Icon/lock.png')} />
-            <TextInput
-              placeholder='Password'
-              placeholderTextColor={'#3B3D41'}
-              style={{ width: 305, height: 50, color: 'white', fontSize: 17, fontWeight: '400' }}
-            // onChangeText={onChangeText}
-            // value={text}
+              style={{ width: '80%', height: 50, color: 'white', fontSize: 17, fontWeight: '400' }}
+            onChangeText={setPassword}
+            value={password}
             />
           </LinearGradient>
         </Shadow>
@@ -162,7 +235,7 @@ const SignUp = () => {
 
 
       {/* Button Section */}
-      <TouchableOpacity onPress={() => navigation.navigate('OTP')} style={{ alignSelf: 'center' }}>
+      <TouchableOpacity onPress={() => handleBtn()} style={{ alignSelf: 'center' }}>
         <Neomorph
           darkShadowColor="black" // <- set this
           lightShadowColor="white" // <- this

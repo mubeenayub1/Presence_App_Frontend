@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -16,16 +16,23 @@ import color from '../../components/assets/color';
 import {
     heightPercentageToDP,
     widthPercentageToDP,
-  } from 'react-native-responsive-screen';
+} from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 
 
-export default function Selfie() {
+export default function Selfie({ route }) {
+    const profileImage = route?.params?.profileimage;
+    const [selfieimg, setselfieImg] = React.useState({});
+    // console.log('profile data------', profileImage);
+
+// 
+
+
+
     const navigation = useNavigation()
-    const handleBtn = () =>{
+    const handleBtn = () => {
         OpenCamera()
         navigation.replace('home')
-
     }
 
     const OpenCamera = () => {
@@ -35,10 +42,44 @@ export default function Selfie() {
             cropping: true,
             useFrontCamera: true,
         }).then(image => {
-            console.log(image);
+            console.log('image ------------', image);
+            // setselfieImg(image);
+
+            setselfieImg(image);
         });
     };
+ 
+    const sendData =()=>{
 
+// profile Image
+
+    const Profileimg = {
+        name: profileImage.path.split('/')[
+            profileImage.path.split('/').length - 1
+        ],
+        type: profileImage.mime,
+        size: profileImage.size,
+        uri: profileImage.path,
+        lastModified: profileImage.modificationDate,
+        lastModifiedDate: new Date(),
+    };
+    console.log('user data image------', Profileimg);
+
+
+    // selfie
+    const selfieimgobj = {
+        name: selfieimg?.path?.split('/')[
+            selfieimg?.path?.split('/').length - 1
+        ],
+        type: selfieimg?.mime,
+        size: selfieimg?.size,
+        uri: selfieimg?.path,
+        lastModified: selfieimg?.modificationDate,
+        lastModifiedDate: new Date(),
+    };
+    console.log('selfie image-----', selfieimgobj);
+    }
+    
     return (
         <View style={styles.body}>
             {/* <Pressable style={{height:50,width:"80%",backgroundColor:"red"}} onPress={()=> OpenCamera()}>
@@ -60,52 +101,52 @@ export default function Selfie() {
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                        <View style={{width:'35%', height:'100%', alignSelf:'flex-start', flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-                            <Image style={{width:25 , height:25 , tintColor:'white'}} source={require('../../components/Images/arrow.png')}/>
-                            <Image style={{width:50 , height:50 }} source={require('../../components/Images/logo.png')}/>
-                        </View>
-                    </LinearGradient>
+                    <View style={{ width: '35%', height: '100%', alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Image style={{ width: 25, height: 25, tintColor: 'white' }} source={require('../../components/Images/arrow.png')} />
+                        <Image style={{ width: 50, height: 50 }} source={require('../../components/Images/logo.png')} />
+                    </View>
+                </LinearGradient>
             </View>
             <ImageBackground
-                style={{ width: '100%', height: heightPercentageToDP(88) , alignItems:'center', justifyContent:'flex-end'}}
+                style={{ width: '100%', height: heightPercentageToDP(88), alignItems: 'center', justifyContent: 'flex-end' }}
                 source={require('../../components/Images/dummySelfie.png')}>
 
-<TouchableOpacity onPress={()=> handleBtn()}>
-        <Neomorph
-          darkShadowColor="black" // <- set this
-          lightShadowColor="white" // <- this
-          style={{
-            shadowOpacity: 0.1, // <- and this or yours opacity
-            shadowRadius: 1,
-            borderRadius: 50,
-            backgroundColor: color.dark,
-            width: widthPercentageToDP(89),
-            height: heightPercentageToDP(8),
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom:'10%'
-          }}>
-          <LinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            locations={[0, 0.5, 0.6]}
-            colors={['#565962', '#9F9F9F', '#9F9F9F']}
-            style={{
-              width: widthPercentageToDP(88.5),
-              height: heightPercentageToDP(7.5),
-              borderRadius: 50,
-              alignItems: 'center',
-              justifyContent: 'center',
-              bottom: heightPercentageToDP(0.1),
-              alignSelf: 'center'
-            }}>
-            <Text style={{ fontSize: 20, fontWeight: '400', color: color.white }}>
-            Capture
-            </Text>
-          </LinearGradient>
-        </Neomorph>
-      </TouchableOpacity>
-                </ImageBackground>
+                <TouchableOpacity onPress={() => handleBtn()}>
+                    <Neomorph
+                        darkShadowColor="black" // <- set this
+                        lightShadowColor="white" // <- this
+                        style={{
+                            shadowOpacity: 0.1, // <- and this or yours opacity
+                            shadowRadius: 1,
+                            borderRadius: 50,
+                            backgroundColor: color.dark,
+                            width: widthPercentageToDP(89),
+                            height: heightPercentageToDP(8),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: '10%'
+                        }}>
+                        <LinearGradient
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            locations={[0, 0.5, 0.6]}
+                            colors={['#565962', '#9F9F9F', '#9F9F9F']}
+                            style={{
+                                width: widthPercentageToDP(88.5),
+                                height: heightPercentageToDP(7.5),
+                                borderRadius: 50,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                bottom: heightPercentageToDP(0.1),
+                                alignSelf: 'center'
+                            }}>
+                            <Text style={{ fontSize: 20, fontWeight: '400', color: color.white }}>
+                                Capture
+                            </Text>
+                        </LinearGradient>
+                    </Neomorph>
+                </TouchableOpacity>
+            </ImageBackground>
         </View>
     );
 }

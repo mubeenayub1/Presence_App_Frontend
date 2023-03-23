@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const Splach = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('auth')
+      navigation.replace('auth')
     }, 3000);
   }, []);
   return (
