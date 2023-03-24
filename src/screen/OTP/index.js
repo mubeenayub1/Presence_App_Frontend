@@ -18,10 +18,13 @@ import {
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
-
+import auth from '@react-native-firebase/auth';
+import Loader from '../../components/Loader';
 const OTP = ({route}) => {
   const profileImage = route?.params?.profile;
   // console.log('profile image in otp-------', profileImage);
+  const confirm = route?.params?.confirm;
+  // console.log('confirmation-----------', confirm);
   const navigation = useNavigation();
 
   const [code, setCode] = useState('');
@@ -30,7 +33,7 @@ const OTP = ({route}) => {
   const inputRef3 = useRef(null);
   const inputRef4 = useRef(null);
   const inputRef5 = useRef(null);
-
+  const [showindicator, setShowIndicator] = useState(false);
   const handleOTPChange = (index, value) => {
     setCode(prevCode => {
       const newCode = prevCode.split('');
@@ -82,12 +85,23 @@ const OTP = ({route}) => {
     }
   };
 
+  async function confirmCode() {
+    try {
+      setShowIndicator(true);
+      await confirm.confirm(code);
+      setShowIndicator(false);
+      navigation.replace('selfie')
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
   return (
     <LinearGradient
       colors={['#34393F', '#34393F', '#1E1F24']}
       style={{flex: 1}}>
       <StatusBar backgroundColor="#34393F" barStyle="light-content" />
-
+      {showindicator === true ? <Loader /> : null}
       <Text
         style={{
           fontSize: 26,
@@ -232,11 +246,34 @@ const OTP = ({route}) => {
               />
             </LinearGradient>
           </Neomorph>
+          <Neomorph
+            darkShadowColor="black" // <- set this
+            lightShadowColor="white" // <- this
+            style={{
+              shadowOpacity: 0.1, // <- and this or yours opacity
+              shadowRadius: 3,
+              borderRadius: 5,
+              backgroundColor: '#292C30',
+              width: 50,
+              height: 76,
+            }}>
+            <LinearGradient
+              colors={['#26272B', '#26272B', '#33383E']}
+              style={{width: '100%', height: '100%', borderRadius: 5}}>
+              <TextInput
+                ref={inputRef5}
+                style={styles.input}
+                maxLength={1}
+                keyboardType="number-pad"
+                onChangeText={value => handleOTPChange(5, value)}
+              />
+            </LinearGradient>
+          </Neomorph>
         </View>
         {/* <Text style={styles.code}>{code}</Text> */}
       </View>
 
-      <TouchableOpacity onPress={() => navigation.replace('selfie')}>
+      <TouchableOpacity onPress={() => confirmCode()}>
         <Neomorph
           darkShadowColor="black" // <- set this
           lightShadowColor="white" // <- this

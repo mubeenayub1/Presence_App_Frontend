@@ -20,8 +20,8 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImagePicker from 'react-native-image-crop-picker';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
-// import Loader from 'react-native-multi-loader';
-
+import Loader from '../Loader';
+import auth from '@react-native-firebase/auth';
 const SignUp = () => {
   const navigation = useNavigation();
   const [showModel, setShowModel] = useState(true);
@@ -29,6 +29,9 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [number, setNumber] = useState('');
+
+  const [showindicator, setShowIndicator] = useState(false);
   // const [show, setShow] = useState(false);
 
   const OpenCamera = () => {
@@ -162,31 +165,40 @@ const SignUp = () => {
       body: formdata,
       redirect: 'follow',
     };
+    setShowIndicator(true);
     fetch('http://16.170.213.237:4000/api/v1/register', requestOptions)
       .then(response => response.text())
-      .then(result => {
+      .then(async result => {
         let data = JSON.parse(result);
+        console.log('response of -----', data);
         if (data.sucess === false) {
-          // setShow(false);
-          return Toast.show({
+          setShowIndicator(false);
+          Toast.show({
             type: ALERT_TYPE.WARNING,
             title: 'Warning',
             textBody: data.message,
           });
         }
         if (data.sucess === true) {
+          const confirmation = await auth().signInWithPhoneNumber(number);
+          setShowIndicator(false);
           // setShow(false);
-          navigation.replace('OTP');
+          navigation.replace('OTP', {confirm: confirmation});
         }
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setShowIndicator(false);
+        console.log('error', error);
+      });
     const ImageObject = JSON.stringify(imgObj);
 
     await AsyncStorage.setItem('ImageObject', ImageObject);
   };
+  
 
   return (
     <ScrollView style={{width: '100%'}} showsVerticalScrollIndicator={false}>
+      {showindicator === true ? <Loader /> : null}
       <Image
         style={{
           width: widthPercentageToDP(40),
@@ -293,7 +305,6 @@ const SignUp = () => {
           </LinearGradient>
         </View>
       ) : null}
-
 
       {/* Input  */}
       <View style={{alignSelf: 'center', alignItems: 'center'}}>
@@ -415,6 +426,45 @@ const SignUp = () => {
               }}
               onChangeText={setPassword}
               value={password}
+            />
+          </LinearGradient>
+        </Shadow>
+        <Shadow
+          inner={false} // <- enable inner shadow
+          useArt // <- set this prop to use non-native shadow on ios
+          style={{
+            shadowOffset: {width: 5, height: 5},
+            shadowOpacity: 0.3,
+            shadowColor: 'black',
+            shadowRadius: 10,
+            borderRadius: 0,
+            backgroundColor: 'transparent',
+            width: widthPercentageToDP(90),
+            height: heightPercentageToDP(7.5),
+            marginVertical: 20,
+            flexDirection: 'row',
+          }}>
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            colors={['#1E1F24', '#34393F', '#34393F']}
+            style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+            <Image
+              style={{width: 15, height: 19, marginHorizontal: 20}}
+              source={require('../Icon/lock.png')}
+            />
+            <TextInput
+              placeholder="PHone Number for otp"
+              placeholderTextColor={'#3B3D41'}
+              style={{
+                width: '80%',
+                height: 50,
+                color: 'white',
+                fontSize: 17,
+                fontWeight: '400',
+              }}
+              onChangeText={text => setNumber(text)}
+              value={number}
             />
           </LinearGradient>
         </Shadow>
