@@ -13,7 +13,7 @@ const Home = ({ navigation }) => {
         style={{ width: 150, height: 150 }}
         source={require('../../components/Images/logo.png')}
       />
-      <Text style={{alignSelf:'center', color:'white', fontWeight:'600', fontSize:18}}>Please Wait We Verify You Identity</Text>
+      <Text style={{alignSelf:'center', color:'white', fontWeight:'600', fontSize:18, textAlign:'center'}}>Congratulations Your Profile{"\n"}is Verified</Text>
     </LinearGradient>
   );
 };
